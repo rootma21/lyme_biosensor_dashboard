@@ -1,15 +1,19 @@
 import dash
-from dash import dcc, html, dcc, Input, Output
+from dash import dcc, html, Input, Output
 import plotly.express as px
 import pandas as pd
 import numpy as np
+import dash_bootstrap_components as dbc
 
 ANTIGEN_LIST = ['P100', 'P41', 'OspC', 'DbpA', 'BmpA',
                 'DbpB', 'P45', 'P58', 'P66', 'VlsE', 'ErpL', 'OspD']
 WIDTH = '49px'
 
 # create the app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True,
+                external_stylesheets=[dbc.themes.ZEPHYR])
+
+app.title = "Lyme Test Results Analysis"
 # ------------------------------------------
 
 
@@ -18,8 +22,11 @@ app = dash.Dash(__name__)
 app.layout = html.Div([
     html.H1('Lyme Diagnosis Test Results',
             style={'text-align': 'center'}),
+    html.Hr(),
+
 
     # dropdown to select specific test
+    html.P('Select Test to Display', id='t1'),
     dcc.Dropdown(id='select_test',
                  options=[
                      {'label': 'TTT', 'value': '2-tier interpretation '},
@@ -33,12 +40,14 @@ app.layout = html.Div([
                  ),
 
     # slider allows user to choose how many antigens must be above threshold
+    html.P('Min # of Antigens', id='t2'),
     dcc.Slider(1, 12, 1,
                value=3,
                id='select_num_antigens'
                ),
 
     # checklist to select which antigens to include
+    html.P('Select Antigens to Include in Diagnosis', id='t3'),
     dcc.Checklist(
         ANTIGEN_LIST,
         ANTIGEN_LIST,

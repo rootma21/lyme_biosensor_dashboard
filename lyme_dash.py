@@ -173,6 +173,7 @@ app.layout = html.Div([
      ])
 def update_graph(test_choice, num_ant, ant_list, P100, P41, OspC, DbpA, BmpA,
                  DbpB, P45, P58, P66, VlsE, ErpL, OspD):
+    print(num_ant)
 
     thresh_dict = {'P100': P100, 'P41': P41, 'OspC': OspC, 'DbpA': DbpA,
                    'BmpA': BmpA, 'DbpB': DbpB, 'P45': P45, 'P58': P58,
@@ -204,14 +205,20 @@ def update_graph(test_choice, num_ant, ant_list, P100, P41, OspC, DbpA, BmpA,
     if test_choice == 'our_diag':
         # if antigen is above defined threshold, set as 1, if not, then 0
         for ant in ant_list:
-            df_lab[ant] = (df_lab[ant] > thresh_dict[ant]).astype(int)
+            print(ant_list)
+
+            df_lab[f'{ant}_bin'] = (
+                df_lab[ant] > thresh_dict[ant]).astype(int)
+
+        # create ant_list_bin
+        ant_list_bin = [f'{ant}_bin' for ant in ant_list]
 
         # get the sum of the antigen scores
-        df_lab['sum_col'] = df_lab[ant_list].sum(axis=1)
+        df_lab['sum_col'] = df_lab[ant_list_bin].sum(axis=1)
 
         # from the sum col, determine if pos or neg
         df_lab['our_diag'] = 'Neg'
-        df_lab.loc[df_lab['sum_col'] > num_ant, 'our_diag'] = 'Pos'
+        df_lab.loc[df_lab['sum_col'] >= num_ant, 'our_diag'] = 'Pos'
 
     # determine if the sample was correctly predicted
     conditions = [

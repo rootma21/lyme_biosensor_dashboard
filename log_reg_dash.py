@@ -74,6 +74,20 @@ def update_graph(test_choice):
     # create figure
     fig = px.bar(df_lab, x='Test Results', color='Sample Group')
 
+    results_dict = dict(df_lab['Test Results'].value_counts())
+    fn = results_dict.get('False Negative', 0)
+    tp = results_dict.get('True Positive', 0)
+    tn = results_dict.get('True Negative', 0)
+    fp = results_dict.get('False Positive', 0)
+
+    # calculate
+    sensitivity = tp/(tp+fn)
+    specificity = tn/(tn+fp)
+
+    # rounding
+    sensitivity = round((sensitivity*100), 2)
+    specificity = round((specificity*100), 2)
+
     # create containers for displays
     se_container = "Sensitivity Score: {}%".format(sensitivity)
     sp_container = "Specificity Score: {}%".format(specificity)

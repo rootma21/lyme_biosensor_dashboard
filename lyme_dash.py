@@ -5,6 +5,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 import dash_bootstrap_components as dbc
+from regex import P
 
 ANTIGEN_LIST = ['P100', 'P41', 'OspC', 'DbpA', 'BmpA',
                 'DbpB', 'P45', 'P58', 'P66', 'VlsE', 'ErpL', 'OspD']
@@ -52,7 +53,8 @@ controls = dbc.Card(
                 dbc.Label('Choose Antigens to Include in Diagnosis: ', id='t3'),
                 dcc.Checklist(
                     ANTIGEN_LIST,
-                    ANTIGEN_LIST,
+                    ['P100', 'OspC', 'DbpA', 'BmpA',
+                     'DbpB', 'P45', 'P58', 'P66', 'VlsE', 'ErpL', 'OspD'],
                     id='antigens_selected',
                     style={"width": PERCENT},
                     inline=True)],
@@ -108,29 +110,29 @@ app.layout = html.Div([
     ),
     dbc.Row(
         [
-            dcc.Input(2, id="P100", type="number", placeholder="P100",
+            dcc.Input(3.199, id="P100", type="number", placeholder="P100",
                       debounce=True, style={'width': WIDTH, "margin-left": "15px"}),
             dcc.Input(1, id="P41", type="number", placeholder="P41",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(1, id="OspC", type="number", placeholder="OspC",
+            dcc.Input(1.841, id="OspC", type="number", placeholder="OspC",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(2.01, id="DbpA", type="number", placeholder="DbpA",
+            dcc.Input(2.2, id="DbpA", type="number", placeholder="DbpA",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(2.432, id="BmpA", type="number", placeholder="BmpA",
+            dcc.Input(2.6, id="BmpA", type="number", placeholder="BmpA",
                       debounce=True, style={'width': WIDTH}),
             dcc.Input(1.9, id="DbpB", type="number", placeholder="DbpB",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(4, id="P45", type="number", placeholder="P45",
+            dcc.Input(4.672, id="P45", type="number", placeholder="P45",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(5.49, id="P58", type="number", placeholder="P58",
+            dcc.Input(4, id="P58", type="number", placeholder="P58",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(2.765, id="P66", type="number", placeholder="P66",
+            dcc.Input(3, id="P66", type="number", placeholder="P66",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(1.7, id="VlsE", type="number", placeholder="VlsE",
+            dcc.Input(1.2, id="VlsE", type="number", placeholder="VlsE",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(1.7, id="ErpL", type="number", placeholder="ErpL",
+            dcc.Input(2.252, id="ErpL", type="number", placeholder="ErpL",
                       debounce=True, style={'width': WIDTH}),
-            dcc.Input(3.172, id="OspD", type="number", placeholder="OspD",
+            dcc.Input(3.1, id="OspD", type="number", placeholder="OspD",
                       debounce=True, style={'width': WIDTH}),
         ],
         align="center",
@@ -173,7 +175,6 @@ app.layout = html.Div([
      ])
 def update_graph(test_choice, num_ant, ant_list, P100, P41, OspC, DbpA, BmpA,
                  DbpB, P45, P58, P66, VlsE, ErpL, OspD):
-    print(num_ant)
 
     thresh_dict = {'P100': P100, 'P41': P41, 'OspC': OspC, 'DbpA': DbpA,
                    'BmpA': BmpA, 'DbpB': DbpB, 'P45': P45, 'P58': P58,
@@ -205,7 +206,7 @@ def update_graph(test_choice, num_ant, ant_list, P100, P41, OspC, DbpA, BmpA,
     if test_choice == 'our_diag':
         # if antigen is above defined threshold, set as 1, if not, then 0
         for ant in ant_list:
-            print(ant_list)
+
 
             df_lab[f'{ant}_bin'] = (
                 df_lab[ant] > thresh_dict[ant]).astype(int)
